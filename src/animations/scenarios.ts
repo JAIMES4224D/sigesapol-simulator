@@ -6,13 +6,12 @@ type ScenarioStep = {
   path: NodeId[];
   blocked?: boolean;
   variant?: PacketVariant;
-  delayBefore?: number; // ms antes de lanzar este paquete
+  delayBefore?: number; 
 };
 
 interface ScenarioConfig {
   steps: ScenarioStep[];
-  /** Estado forzado de algún nodo ANTES de lanzar los paquetes (ej. un
-   * servidor caído por mantenimiento). Se aplica justo después del reset. */
+  
   presetStatuses?: Partial<Record<NodeId, NodeStatus>>;
   logs: Array<{ level: "info" | "warn" | "error" | "success"; message: string }>;
 }
@@ -34,10 +33,7 @@ const SCENARIOS: Record<ScenarioId, ScenarioConfig> = {
     ],
   },
 
-  /**
-   * Ráfaga balanceada entre WEB-01/WEB-02, todas llegando hasta la base de
-   * datos. Simula tráfico legítimo pero muy alto en volumen.
-   */
+
   overload: {
     steps: [
       { path: FULL_WEB01, variant: "cyan" },
@@ -56,11 +52,7 @@ const SCENARIOS: Record<ScenarioId, ScenarioConfig> = {
     ],
   },
 
-  /**
-   * Ataque de Denegación de Servicio: ráfaga mucho más densa y agresiva que
-   * la intrusión simple, todo bloqueado en el FIREWALL. El nodo queda
-   * marcado en alerta antes de que llegue el primer paquete (anticipación).
-   */
+  
   ddos: {
     presetStatuses: { firewall: "warning" },
     steps: Array.from({ length: 10 }, (_, i) => ({
@@ -76,11 +68,7 @@ const SCENARIOS: Record<ScenarioId, ScenarioConfig> = {
     ],
   },
 
-  /**
-   * WEB-01 entra en mantenimiento (queda en "warning" todo el escenario,
-   * fuera del recorrido de los paquetes) y el 100% del tráfico se reparte
-   * hacia WEB-02. Demuestra alta disponibilidad / failover.
-   */
+
   failover: {
     presetStatuses: { web01: "warning" },
     steps: [
