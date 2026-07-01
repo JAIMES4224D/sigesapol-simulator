@@ -114,3 +114,6 @@ export function logForScenario(scenario: ScenarioId) {
   const { addLog } = useSimStore.getState();
   SCENARIOS[scenario].logs.forEach((entry) => addLog(entry.level, entry.message));
 }
+export function getScenarioSteps(scenario: ScenarioId) {
+  return SCENARIOS[scenario].steps;
+}
